@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    restart: always
+    container_name: secre-ts-db
+  redis_db:
+    image: redis:7.2.2
+    restart: always
+    ports:
+      - ${REDIS_PORT}:6379
+    container_name: secre-ts-redis
+    
+
+
