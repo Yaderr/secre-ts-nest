@@ -40,9 +40,9 @@ export class PasswordsService {
     return decryptedPasswords
   }
 
-  async findOne(id: string, user: User): Promise<any> {
+  async findOne(id: string, user: User): Promise<Password> {
     const { id: userId, randomkey } = user
-    const password: Password = await this.passwordRepository.findOneBy({ id })
+    const password: Password = await this.passwordRepository.findOneBy({ id, user: { id: user.id } })
 
     if(!password) throw new NotFoundException(`Password with id ${id} Not found`)
     const decryptedPassword = await this.cryptoService.decrypt(password.password, userId, randomkey)
@@ -55,8 +55,9 @@ export class PasswordsService {
 
   async update(id: string, updatePasswordDto: UpdatePasswordDto, user: User): Promise<void> {
     const { id: userId, randomkey } = user
+    await this.findOne(id, user)
+    let password = await this.passwordRepository.preload({ id, ...updatePasswordDto})
     
-    const password = await this.passwordRepository.preload({id, ...updatePasswordDto })
     if(!password) throw new NotFoundException(`Password with id ${id} Not found`)
     
     const queryRunner = this.dataSource.createQueryRunner()
