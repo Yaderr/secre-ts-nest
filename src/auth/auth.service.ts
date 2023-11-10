@@ -9,6 +9,7 @@ import { JwtPayload, LoginResponse } from './interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { RedisClient } from './providers/redis.provider';
 import { CryptoService } from 'src/crypto/crypto.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly configService: ConfigService,
     private jwtService: JwtService,
     private cryptoService: CryptoService,
     @Inject('REDIS_CLIENT')
@@ -27,7 +29,7 @@ export class AuthService {
   
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const passwordHash = await bcrypt.hash(createUserDto.password, +process.env.BCRYPT_SALT_ROUNDS)
+      const passwordHash = await bcrypt.hash(createUserDto.password, this.configService.get('BCRYPT_SALT_ROUNDS'))
       const randomkey = this.cryptoService.generateRandomKey()
       
       const user = this.userRepository.create({

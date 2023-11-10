@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth.service';
 import { JwtPayload } from '../interfaces';
 import { User } from '../entities/user.entity';
-import { CryptoService } from 'src/crypto/crypto.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
