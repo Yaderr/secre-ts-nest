@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Password } from './entities/password.entity';
 import { CryptoModule } from 'src/crypto/crypto.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { WebsiteDetail } from './entities/websiteDetail.entity';
 
 @Module({
   controllers: [PasswordsController],
@@ -12,7 +13,7 @@ import { AuthModule } from 'src/auth/auth.module';
   imports: [
     CryptoModule,
     AuthModule,
-    TypeOrmModule.forFeature([Password])
+    TypeOrmModule.forFeature([Password, WebsiteDetail])
   ],
   exports: []
 })

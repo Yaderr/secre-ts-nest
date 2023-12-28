@@ -6,7 +6,8 @@ import { Password } from './entities/password.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CryptoService } from 'src/crypto/crypto.service';
 import { User } from 'src/auth/entities/user.entity';
-import { error } from 'console';
+import { error, log } from 'console';
+import { WebsiteDetail } from './entities/websiteDetail.entity';
 
 @Injectable()
 export class PasswordsService {
@@ -16,19 +17,24 @@ export class PasswordsService {
   constructor(
     @InjectRepository(Password)
     private readonly passwordRepository: Repository<Password>,
+    @InjectRepository(WebsiteDetail)
+    private readonly websiteDetailRepository: Repository<WebsiteDetail>,
     private readonly cryptoService: CryptoService,
     private readonly dataSource: DataSource
   ){}
   
-  async create(createPasswordDto: CreatePasswordDto, user: User) {
+  async create(createPasswordDto: CreatePasswordDto, user: User) { // TODO: way to insert the website url to db 
     const { id, randomkey } = user
     
     try {
+      const websiteD = await this.websiteDetailRepository.findOneBy({ websiteUrl: createPasswordDto.websiteUrl}) ?? new WebsiteDetail(createPasswordDto.websiteUrl)
+
       createPasswordDto.password = await this.cryptoService.cipher(createPasswordDto.password, id, randomkey)
-      const password: Password = this.passwordRepository.create({ ...createPasswordDto, user })
+      
+      const password: Password = this.passwordRepository.create({ ...createPasswordDto, user, websiteDetails: websiteD })
       await this.passwordRepository.save(password)
       return password
-    } catch {
+    } catch(error) {
       this.handleException(error)
     }
   }

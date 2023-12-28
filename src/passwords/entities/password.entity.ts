@@ -1,5 +1,6 @@
 import { User } from "src/auth/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { WebsiteDetail } from "./websiteDetail.entity";
 
 @Entity('passwords')
 export class Password {
@@ -41,4 +42,14 @@ export class Password {
 
     @UpdateDateColumn()
     updateAt: Date
+
+    @ManyToOne(
+        () => WebsiteDetail,
+        (WebsiteDetail) => WebsiteDetail.websiteUrl,
+        {
+            eager: true,
+            cascade: true
+        }
+    )
+    websiteDetails: WebsiteDetail
 }
