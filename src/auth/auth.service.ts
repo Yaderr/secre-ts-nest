@@ -62,6 +62,8 @@ export class AuthService {
 
     const jwtToken = this.getJwt({ id: user.id })
     
+    await this.userRepository.update(user.id, { lastLogin: new Date(Date.now()) })
+    
     return {
       user,
       access_token: jwtToken
@@ -89,7 +91,7 @@ export class AuthService {
   private findUserPasswordByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({
       where: { email },
-      select: { password: true, fullName: true, email: true, id: true, isActive: true }
+      select: { password: true, fullName: true, email: true, id: true, profilePic: true, lastLogin: true, isActive: true }
     })
   }
 

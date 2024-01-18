@@ -18,12 +18,24 @@ export class User {
 
     @Column({
         type: 'text',
+        nullable: true
+    })
+    profilePic: string
+
+    @Column({
+        type: 'text',
         select: false,
     })
     password: string
 
     @Column('text',{ nullable: false })
     randomkey: string
+
+    @Column({
+        type: 'timestamp',
+        nullable: true
+    })
+    lastLogin: Date
 
     @Column('boolean', { default: true })
     isActive: boolean

@@ -1,4 +1,4 @@
-import { AfterInsert, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { AfterInsert, BeforeInsert, Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Password } from "./password.entity";
 
 @Entity()
@@ -26,4 +26,12 @@ export class WebsiteDetail {
         nullable: true
     })
     icon: string
+
+    @BeforeInsert()
+    async afterInsert() {
+        console.log(this.websiteUrl);
+        this.icon = `https://logo.clearbit.com/${this.websiteUrl}`
+        
+    }
+
 }
