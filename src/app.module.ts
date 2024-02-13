@@ -8,6 +8,7 @@ import { SeedModule } from './seed/seed.module';
 import { PasswordsModule } from './passwords/passwords.module';
 import { CommonModule } from './common/common.module';
 import { JoinValidationSchema } from './common/config/joi.validation';
+import { CardsModule } from './cards/cards.module';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { JoinValidationSchema } from './common/config/joi.validation';
     SecretsModule,
     SeedModule,
     PasswordsModule,
-    CommonModule
+    CommonModule,
+    CardsModule
   ],
   controllers: [],
   providers: [],
