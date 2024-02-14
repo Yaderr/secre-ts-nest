@@ -100,8 +100,9 @@ export class AuthService {
   }
 
   handleExceptions(error: any): never {
+    console.log(error)
     if(error.code === '23505') {
-      throw new BadRequestException(error.detail)
+      throw new BadRequestException('User already registered')
     }
     
     this.logger.error({error})
